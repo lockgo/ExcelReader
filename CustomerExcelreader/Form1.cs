@@ -82,87 +82,91 @@ namespace CustomerExcelreader
         {
             DialogResult result = openFileDialogIndex.ShowDialog();
             String path = openFileDialogIndex.FileName;
-            Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
-            Microsoft.Office.Interop.Excel.Workbook wb = excel.Workbooks.Open(path);
-            Microsoft.Office.Interop.Excel.Worksheet ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.Worksheets.get_Item(2);
-            //List<Indexcustomers> CustomerList = new List<Indexcustomers>();
 
-            int GuestRow = 0;
-            int sheetCounter = 2;
-            int oldWounds = 0;
-            while (sheetCounter < wb.Worksheets.Count)
+            if (openFileDialogIndex.FileName != "")
             {
+                Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
+                Microsoft.Office.Interop.Excel.Workbook wb = excel.Workbooks.Open(path);
+                Microsoft.Office.Interop.Excel.Worksheet ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.Worksheets.get_Item(2);
+                //List<Indexcustomers> CustomerList = new List<Indexcustomers>();
 
-                while (((ws.Cells[GuestRow + 3, 1]).Value2 != null))
+                int GuestRow = 0;
+                int sheetCounter = 2;
+                int oldWounds = 0;
+                while (sheetCounter < wb.Worksheets.Count)
                 {
-                    Indexcustomers CustomerTemp = new Indexcustomers();
-                    customers CustomerHistoryTemp = new customers();
-                    if ((ws.Cells[GuestRow + 3, 1]).Value2 != null)
-                    {
-                        guestNumberBox.Text = (ws.Cells[GuestRow + 3, 1]).Value2.ToString();
-                    }
-                    else
-                    {
-                        guestNumberBox.Text = "-NA-";
-                    }
 
-                    if ((ws.Cells[GuestRow + 3, 2]).Value2 != null)//Casino number
+                    while (((ws.Cells[GuestRow + 3, 1]).Value2 != null))
                     {
-                        clubNumberBox.Text = (ws.Cells[GuestRow + 3, 2]).Value2.ToString();
-                    }
-                    else
-                    {
-                        clubNumberBox.Text = "-NA-";
-                    }
+                        Indexcustomers CustomerTemp = new Indexcustomers();
+                        customers CustomerHistoryTemp = new customers();
+                        if ((ws.Cells[GuestRow + 3, 1]).Value2 != null)
+                        {
+                            guestNumberBox.Text = (ws.Cells[GuestRow + 3, 1]).Value2.ToString();
+                        }
+                        else
+                        {
+                            guestNumberBox.Text = "-NA-";
+                        }
 
-                    if ((ws.Cells[GuestRow + 3, 3]).Value2 != null)//Guest Name
-                    {
-                        GuestNameBox.Text = (ws.Cells[GuestRow + 3, 3]).Value2.ToString();
-                    }
-                    else
-                    {
-                        GuestNameBox.Text = "-NA-";
-                    }
+                        if ((ws.Cells[GuestRow + 3, 2]).Value2 != null)//Casino number
+                        {
+                            clubNumberBox.Text = (ws.Cells[GuestRow + 3, 2]).Value2.ToString();
+                        }
+                        else
+                        {
+                            clubNumberBox.Text = "-NA-";
+                        }
 
-                    if ((ws.Cells[GuestRow + 3, 4]).Value2 != null)//remake
-                    {
-                        ContactBox.Text = (ws.Cells[GuestRow + 3, 4]).Value2.ToString();
-                    }
-                    else
-                    {
-                        ContactBox.Text = "-NA-";
-                    }
-                    CustomerTemp.GuestNumber = guestNumberBox.Text;
-                    CustomerTemp.CasioNumber = clubNumberBox.Text;
-                    CustomerTemp.Guest = GuestNameBox.Text;
-                    CustomerTemp.Contact = ContactBox.Text;
+                        if ((ws.Cells[GuestRow + 3, 3]).Value2 != null)//Guest Name
+                        {
+                            GuestNameBox.Text = (ws.Cells[GuestRow + 3, 3]).Value2.ToString();
+                        }
+                        else
+                        {
+                            GuestNameBox.Text = "-NA-";
+                        }
 
-                    ////////////////////////////////////////////
-                    CustomerHistoryTemp.ClubNumber = guestNumberBox.Text;
-                    CustomerHistoryTemp.CasioNumber = clubNumberBox.Text;
-                    CustomerHistoryTemp.Guest = GuestNameBox.Text;
-                    CustomerHistoryTemp.Contact = ContactBox.Text;
-                    ////////////////////////////////////////////
-                    CustomerList.Add(CustomerTemp);//I might merge these two objects in the future. It was needed to have them as different objects at the time.
-                    CustomerHistoryList.Add(CustomerHistoryTemp);//I might merge these two objects in the future. It was needed to have them as different objects at the time.
-                    listNames.Items.Add(CustomerList[oldWounds + GuestRow].GuestNumber + " \t" + CustomerList[oldWounds + GuestRow].CasioNumber + " \t" + CustomerList[oldWounds + GuestRow].Guest + " \t" + CustomerList[oldWounds + GuestRow].Contact);
-                    GuestRow++;
+                        if ((ws.Cells[GuestRow + 3, 4]).Value2 != null)//remake
+                        {
+                            ContactBox.Text = (ws.Cells[GuestRow + 3, 4]).Value2.ToString();
+                        }
+                        else
+                        {
+                            ContactBox.Text = "-NA-";
+                        }
+                        CustomerTemp.GuestNumber = guestNumberBox.Text;
+                        CustomerTemp.CasioNumber = clubNumberBox.Text;
+                        CustomerTemp.Guest = GuestNameBox.Text;
+                        CustomerTemp.Contact = ContactBox.Text;
+
+                        ////////////////////////////////////////////
+                        CustomerHistoryTemp.ClubNumber = guestNumberBox.Text;
+                        CustomerHistoryTemp.CasioNumber = clubNumberBox.Text;
+                        CustomerHistoryTemp.Guest = GuestNameBox.Text;
+                        CustomerHistoryTemp.Contact = ContactBox.Text;
+                        ////////////////////////////////////////////
+                        CustomerList.Add(CustomerTemp);//I might merge these two objects in the future. It was needed to have them as different objects at the time.
+                        CustomerHistoryList.Add(CustomerHistoryTemp);//I might merge these two objects in the future. It was needed to have them as different objects at the time.
+                        listNames.Items.Add(CustomerList[oldWounds + GuestRow].GuestNumber + " \t" + CustomerList[oldWounds + GuestRow].CasioNumber + " \t" + CustomerList[oldWounds + GuestRow].Guest + " \t" + CustomerList[oldWounds + GuestRow].Contact);
+                        GuestRow++;
+                    }
+                    oldWounds = oldWounds + GuestRow;
+                    GuestRow = 0;
+                    sheetCounter++;
+                    ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.Worksheets.get_Item(sheetCounter);
                 }
-                oldWounds = oldWounds + GuestRow;
-                GuestRow = 0;
-                sheetCounter++;
-                ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.Worksheets.get_Item(sheetCounter);
+
+
+
+
+                textBox1.Text = oldWounds.ToString();
+                totalAmountOfCustomers = oldWounds;
+                wb.Close();
+                excel.Quit();
+                MessageBox.Show("Completed ");
+                excel = null;
             }
-
-
-
-
-            textBox1.Text = oldWounds.ToString();
-            totalAmountOfCustomers = oldWounds;
-            wb.Close();
-            excel.Quit();
-            MessageBox.Show("Completed ");
-            excel = null;
 
         }
 
@@ -197,49 +201,73 @@ namespace CustomerExcelreader
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            //customers add_customerHistory;
-            if (listNames.SelectedIndex >= 0)// && listNames.SelectedIndex <= Pathlist.Capacity)//somehow SelectedIndex could be less then 0.
+            int selectedNameOfList = 0;
+            if (listNames.SelectedIndex < 0)
             {
-                textBox1.Text = CustomerHistoryList[listNames.SelectedIndex].ClubNumber;
-                CustomerHistoryList[listNames.SelectedIndex].Dates.Add(DateBox.Text);
-                CustomerHistoryList[listNames.SelectedIndex].Description.Add(DescriptionBox.Text);
-                CustomerHistoryList[listNames.SelectedIndex].moneyIN.Add(Convert.ToDouble(InBox.Text));
-                CustomerHistoryList[listNames.SelectedIndex].moneyOUT.Add(Convert.ToDouble(OutBox.Text));
-
-                double inMoney = Convert.ToDouble(InBox.Text);
-                double outMoney = Convert.ToDouble(OutBox.Text);
-
-                //CustomerHistoryList[listNames.SelectedIndex].Balance.Add(Convert.ToDouble(BalanceBox.Text));
-                CustomerHistoryList[listNames.SelectedIndex].Balance.Add(inMoney - outMoney);
-                BalanceBox.Text = (inMoney - outMoney).ToString();
-
-                CustomerHistoryList[listNames.SelectedIndex].Remarks.Add(RemarkBox.Text);
-                CustomerHistoryList[listNames.SelectedIndex].Events.Add(DateBox.Text + " ---" + DescriptionBox.Text + " ---" + InBox.Text + " ---" + OutBox.Text + " ---" + BalanceBox.Text + " ---" + RemarkBox.Text + " ");
-                richTextBox1.Text = CustomerHistoryList[listNames.SelectedIndex].CasioNumber;
-                //EventlistBox.Refresh();
-                EventlistBox.DataSource = listNames.DataSource;//Refresh doesnot work, this is a work around to see updates.
-                EventlistBox.DataSource = CustomerHistoryList[listNames.SelectedIndex].Events;
+                selectedNameOfList = 0;
             }
             else
             {
-                CustomerHistoryList[0].Dates.Add(DateBox.Text);
-                CustomerHistoryList[0].Description.Add(DescriptionBox.Text);
-                CustomerHistoryList[0].moneyIN.Add(Convert.ToDouble(InBox.Text));
-                CustomerHistoryList[0].moneyOUT.Add(Convert.ToDouble(OutBox.Text));
-
-                double inMoney = Convert.ToDouble(InBox.Text);
-                double outMoney = Convert.ToDouble(OutBox.Text);
-
-                //CustomerHistoryList[listNames.SelectedIndex].Balance.Add(Convert.ToDouble(BalanceBox.Text));
-                CustomerHistoryList[0].Balance.Add(inMoney - outMoney);
-                BalanceBox.Text = (inMoney - outMoney).ToString();
-
-                CustomerHistoryList[0].Remarks.Add(RemarkBox.Text);
-                CustomerHistoryList[0].Events.Add(DateBox.Text + " ---" + DescriptionBox.Text + " ---" + InBox.Text + " ---" + OutBox.Text + " ---" + BalanceBox.Text + " ---" + RemarkBox.Text + " ");
-                EventlistBox.DataSource = listNames.DataSource;//Refresh doesnot work, this is a work around to see updates.
-                EventlistBox.DataSource = CustomerHistoryList[0].Events;
-                EventlistBox.Refresh();
+                selectedNameOfList = listNames.SelectedIndex;
             }
+            //customers are added to customerHistory;
+            CustomerHistoryList[selectedNameOfList].historyCount = CustomerHistoryList[selectedNameOfList].historyCount + 1;
+            textBox1.Text = CustomerHistoryList[selectedNameOfList].ClubNumber;
+            if (DateBox.Text != "")
+            {
+                CustomerHistoryList[selectedNameOfList].Dates.Add(DateBox.Text);
+            }
+            else
+            {
+                CustomerHistoryList[selectedNameOfList].Dates.Add("NA");
+            }
+
+            if (DescriptionBox.Text != "")
+            {
+                CustomerHistoryList[selectedNameOfList].Description.Add(DescriptionBox.Text);
+            }
+            else
+            {
+                CustomerHistoryList[selectedNameOfList].Description.Add("NA");
+            }
+
+            if (InBox.Text != "")
+            {
+                CustomerHistoryList[selectedNameOfList].moneyIN.Add(Convert.ToDouble(InBox.Text));
+            }
+            else
+            {
+                CustomerHistoryList[selectedNameOfList].moneyIN.Add(0);
+            }
+
+            if (OutBox.Text != "")
+            {
+                CustomerHistoryList[selectedNameOfList].moneyOUT.Add(Convert.ToDouble(OutBox.Text));
+            }
+            else
+            {
+                CustomerHistoryList[selectedNameOfList].moneyOUT.Add(0);
+            }
+
+            double inMoney = Convert.ToDouble(InBox.Text);
+            double outMoney = Convert.ToDouble(OutBox.Text);
+
+            //CustomerHistoryList[selectedNameOfList].Balance.Add(Convert.ToDouble(BalanceBox.Text));
+            CustomerHistoryList[selectedNameOfList].Balance.Add(inMoney - outMoney);
+            BalanceBox.Text = (inMoney - outMoney).ToString();
+
+            if(RemarkBox.Text != "")
+            {
+                CustomerHistoryList[selectedNameOfList].Remarks.Add(RemarkBox.Text);
+            }
+            else
+            {
+                CustomerHistoryList[selectedNameOfList].Remarks.Add("NA");
+            }
+            CustomerHistoryList[selectedNameOfList].Events.Add("Date: " + DateBox.Text + " Description: " + DescriptionBox.Text + " In: " + InBox.Text + " Out: " + OutBox.Text + " Balance: " + BalanceBox.Text + " Remark: " + RemarkBox.Text + " ");
+            //EventlistBox.Refresh();
+            EventlistBox.DataSource = listNames.DataSource;//Refresh doesnot work, this is a work around to see updates.
+            EventlistBox.DataSource = CustomerHistoryList[selectedNameOfList].Events;
         }
 
         private void editButton_Click(object sender, EventArgs e)
@@ -270,15 +298,55 @@ namespace CustomerExcelreader
                 }
             }
 
-            CustomerHistoryList[listNamesIndex].Dates[EventListBoxIndex] = DateBox.Text;
-            CustomerHistoryList[listNamesIndex].Description[EventListBoxIndex] = DescriptionBox.Text;
-            CustomerHistoryList[listNamesIndex].moneyIN[EventListBoxIndex] = Convert.ToDouble(InBox.Text);
-            CustomerHistoryList[listNamesIndex].moneyOUT[EventListBoxIndex] = Convert.ToDouble(OutBox.Text);
+
+            if (DateBox.Text != "")
+            {
+                CustomerHistoryList[listNamesIndex].Dates[EventListBoxIndex] = DateBox.Text;
+            }
+            else
+            {
+                CustomerHistoryList[listNamesIndex].Dates[EventListBoxIndex] = "NA";
+            }
+
+            if (DescriptionBox.Text != "")
+            {
+                CustomerHistoryList[listNamesIndex].Description[EventListBoxIndex] = DescriptionBox.Text;
+            }
+            else
+            {
+                CustomerHistoryList[listNamesIndex].Description[EventListBoxIndex] = ("NA");
+            }
+
+            if (InBox.Text != "")
+            {
+                CustomerHistoryList[listNamesIndex].moneyIN[EventListBoxIndex] = (Convert.ToDouble(InBox.Text));
+            }
+            else
+            {
+                CustomerHistoryList[listNamesIndex].moneyIN[EventListBoxIndex] = (0);
+            }
+
+            if (OutBox.Text != "")
+            {
+                CustomerHistoryList[listNamesIndex].moneyOUT[EventListBoxIndex] = (Convert.ToDouble(OutBox.Text));
+            }
+            else
+            {
+                CustomerHistoryList[listNamesIndex].moneyOUT[EventListBoxIndex] = (0);
+            }
+
             //CustomerHistoryList[listNamesIndex].Balance[EventListBoxIndex] = Convert.ToDouble(BalanceBox.Text);
             CustomerHistoryList[listNamesIndex].Balance[EventListBoxIndex] = Convert.ToDouble(InBox.Text) - Convert.ToDouble(OutBox.Text);
 
-            CustomerHistoryList[listNamesIndex].Remarks[EventListBoxIndex] = RemarkBox.Text;
-            CustomerHistoryList[listNamesIndex].Events[EventListBoxIndex] = (DateBox.Text + " ---" + DescriptionBox.Text + " ---" + InBox.Text + " ---" + OutBox.Text + " ---" + BalanceBox.Text + " ---" + RemarkBox.Text + " ");
+            if (RemarkBox.Text != "")
+            {
+                CustomerHistoryList[listNamesIndex].Remarks.Add(RemarkBox.Text);
+            }
+            else
+            {
+                CustomerHistoryList[listNamesIndex].Remarks.Add("NA");
+            }
+            CustomerHistoryList[listNamesIndex].Events[EventListBoxIndex] = ("Date: " + DateBox.Text + " Description: " + DescriptionBox.Text + " In: " + InBox.Text + " Out: " + OutBox.Text + " Balance: " + BalanceBox.Text + " Remark: " + RemarkBox.Text + " ");
 
             EventlistBox.DataSource = listNames.DataSource;//Refresh doesnot work, this is a work around to see updates.
             EventlistBox.DataSource = CustomerHistoryList[listNames.SelectedIndex].Events;
@@ -371,28 +439,39 @@ namespace CustomerExcelreader
             String path = saveFileDialog1.FileName;
             //String path = openFileDialogIndex.FileName;
 
-            textBox1.Text = NewExcelFile(path, CustomerList, CustomerHistoryList, totalAmountOfCustomers);
-            //Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
-            //Microsoft.Office.Interop.Excel.Workbook wb = excel.Workbooks.Open(path);
-            //Microsoft.Office.Interop.Excel.Worksheet ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.Worksheets.get_Item(2);
-            //wb.SaveAs(@path);
-
-            //wb.Close();
-            //excel.Quit();
-            //MessageBox.Show("Completed ");
-            //excel = null;
+            if (saveFileDialog1.FileName != "")
+            {
+                textBox1.Text = NewExcelFile(path, CustomerList, CustomerHistoryList, totalAmountOfCustomers);
+            }
 
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Application.Exit();
-            Environment.Exit(0);
+            
+            if (MessageBox.Show("Are you sure you want to Quit.", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                //e.cancel = true;
+                Application.Exit();
+                Environment.Exit(0);
+
+            }
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (MessageBox.Show("Are you sure you want to make a new file?.", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
+                DialogResult.Yes)
+            {
+                List<Indexcustomers> CustomerList = new List<Indexcustomers>();
+                List<customers> CustomerHistoryList = new List<customers>();
+                totalAmountOfCustomers = 0;
+                listNames = new ListBox();
+                EventlistBox = new ListBox();
+                listNames.DataSource = CustomerList;
+                EventlistBox.DataSource = CustomerHistoryList;
 
+            }
         }
 
         public static String NewExcelFile(string filePath, List<Indexcustomers> CustomerList, List<customers> CustomerHistoryList, int totalNumber)
@@ -405,9 +484,12 @@ namespace CustomerExcelreader
             xlApp = new Microsoft.Office.Interop.Excel.Application();
             xlWorkBook = xlApp.Workbooks.Add(misValue);
 
-            for (int numberOfCustomers = totalNumber; numberOfCustomers > 0; numberOfCustomers--)
+            for (int numberOfCustomers = totalNumber-1; numberOfCustomers >= 0; numberOfCustomers--)
             {
                 xlWorkBook.Worksheets.Add();
+
+                Microsoft.Office.Interop.Excel.Worksheet worksheet = xlApp.Worksheets["Sheet" + ((totalNumber - numberOfCustomers + 3).ToString())];
+                worksheet.Name = "Guest " + (CustomerHistoryList[numberOfCustomers].ClubNumber).ToString();
             }
 
             for (int numberOfCustomers = 0; numberOfCustomers < totalNumber; numberOfCustomers++)
@@ -421,6 +503,9 @@ namespace CustomerExcelreader
                 xlWorkSheet.Cells[1, 1] = "Guest:";
                 xlWorkSheet.Cells[1, 2] = CustomerHistoryList[numberOfCustomers].Guest;
                 xlWorkSheet.Cells[1, 5] = "Club Number: ";
+                xlWorkSheet.Columns["E:E"].ColumnWidth = 12.57;
+
+                
                 xlWorkSheet.Cells[1, 6] = CustomerHistoryList[numberOfCustomers].ClubNumber;
 
                 xlWorkSheet.Cells[3, 1] = "Contact:";
@@ -435,6 +520,16 @@ namespace CustomerExcelreader
                 xlWorkSheet.Cells[5, 4] = "Out";
                 xlWorkSheet.Cells[5, 5] = "Balance";
                 xlWorkSheet.Cells[5, 6] = "Remark";
+
+                for (int i = 0; i < CustomerHistoryList[numberOfCustomers].historyCount; i++)
+                {
+                    xlWorkSheet.Cells[i+6, 1] = CustomerHistoryList[numberOfCustomers].Dates[i];
+                    xlWorkSheet.Cells[i+6, 2] = CustomerHistoryList[numberOfCustomers].Description[i];
+                    xlWorkSheet.Cells[i+6, 3] = CustomerHistoryList[numberOfCustomers].moneyIN[i];
+                    xlWorkSheet.Cells[i+6, 4] = CustomerHistoryList[numberOfCustomers].moneyOUT[i];
+                    xlWorkSheet.Cells[i+6, 5] = CustomerHistoryList[numberOfCustomers].Balance[i];
+                    xlWorkSheet.Cells[i+6, 6] = CustomerHistoryList[numberOfCustomers].Remarks[i];
+                }
             }
 
             xlWorkBook.SaveAs(filePath, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);

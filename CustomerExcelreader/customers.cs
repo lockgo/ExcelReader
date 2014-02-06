@@ -17,6 +17,7 @@ namespace CustomerExcelreader
             Balance = new List<double>();
             Remarks = new List<String>();
             Events = new List<string>();
+            historyCount = 0;
 
         }
         /// <summary>
@@ -38,5 +39,7 @@ namespace CustomerExcelreader
         public List<String> Remarks { get; set; }
         public List<String> Events { get; set; }
 
+
+        public int historyCount { get; set; }
     }
 }
